@@ -27,9 +27,9 @@ pbar = ProgressBar(widgets=[Percentage(), Bar()], maxval=len(targets)).start()
 i=0
 
 for hook in targets:
-    hook['artist'] = hook['artist'].encode(encoding='UTF-8',errors='ignore')
-    hook['album'] = hook['album'].encode(encoding='UTF-8',errors='ignore')
-    hook['title'] = hook['title'].encode(encoding='UTF-8',errors='ignore')   
+    hook['artist'] = unicode(hook['artist'], errors='ignore')
+    hook['album'] = unicode(hook['album'], errors='ignore')
+    hook['title'] = unicode(hook['title'], errors='ignore')  
     try:
         link = 'https://itunes.apple.com/search?term=%s' % (
             hook['artist'] + '+' + hook['album']).replace(' ', '+')
