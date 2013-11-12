@@ -26,7 +26,7 @@ for hook in db.lastfm_not_found.find():
         if results:
             flag=0
             for track in results['track']:
-                if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower() and flag=0:
+                if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower() and flag==0:
                     db.lastfm_titles_found.insert(track)
                     print "[FOUND] %s"%(hook['title'])
                     flag =1
