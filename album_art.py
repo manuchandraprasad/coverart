@@ -11,7 +11,7 @@ db_ip = 'localhost'
 #db_ip = 'db.image-quick.com'
 connection = MongoClient(db_ip)
 db = connection.album_art
-
+import unicodedata
 import csv
 targets = []
 try:
@@ -27,6 +27,9 @@ pbar = ProgressBar(widgets=[Percentage(), Bar()], maxval=len(targets)).start()
 i=0
 
 for hook in targets:
+    hook['artist'] = hook['artist'].encode(encoding='UTF-8',errors='ignore')
+    hook['album'] = hook['album'].encode(encoding='UTF-8',errors='ignore')
+    hook['title'] = hook['title'].encode(encoding='UTF-8',errors='ignore')   
     try:
         link = 'https://itunes.apple.com/search?term=%s' % (
             hook['artist'] + '+' + hook['album']).replace(' ', '+')
