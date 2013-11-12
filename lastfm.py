@@ -4,6 +4,7 @@ import requests
 from pprint import pprint
 from progressbar import ProgressBar,Bar,Percentage
 from pymongo import MongoClient
+import traceback
 #connection = MongoClient('db.image-quick.com')
 #connection = MongoClient('10.0.0.10:27017')
 db_ip = 'localhost'
@@ -35,16 +36,17 @@ for hook in targets:
             hook['artist'],hook['album'])
         print "[FETCH] %s - %s "%(hook['artist'],hook['album'])
         last_fm_api = requests.get(link)
-        results = json.loads(apple_api.content)['results']
+        results = last_fm_api.json()['album']
         if results:
             print "[FOUND] %s - %s "%(hook['artist'],hook['album'])
-            db.lastfm_found.insert(results['album'])
+            db.lastfm_found.insert(results)
         else:
             print "[FAIL] %s - %s "%(hook['artist'],hook['album'])
             db.lastfm_not_found.insert(hook)
     except:
+        print traceback.format_exc()
         print "[FAIL][HTTP] %s - %s "%(hook['artist'],hook['album'])
-        db.itunes_store_not_found.insert(hook)
+        db.lastfm_not_found.insert(hook)
     i+=1;
     pbar.update(i)
 pbar.finish()
