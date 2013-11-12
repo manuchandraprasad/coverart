@@ -29,7 +29,7 @@ for hook in songs:
             if type(results['track'])==dict:
                 print "[FOUND] %s"%(hook['song'])
                 if 'image' in results['track'].keys():
-                    hook['album_art'] = results['track']['image'][1]['text']
+                    hook['album_art'] = results['track']['image'][1]['#text']
                     db.h_new.insert(hook)
                     #http://image-quick.com/default-album-artwork.png
                 else:
@@ -42,7 +42,7 @@ for hook in songs:
                     if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower() and flag==0:
                         if 'image' in track.keys():
                             print "[FOUND] %s"%(hook['song'])
-                            hook['album_art'] = track['image'][1]['text']
+                            hook['album_art'] = track['image'][1]['#text']
                             db.h_new.insert(hook)
                             flag=1
                             break
