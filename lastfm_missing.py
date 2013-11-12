@@ -32,9 +32,20 @@ for hook in songs:
         print "[FETCH] %s"%(hook['album'])
         results = api.json()['results']['trackmatches']
         if results:
-            flag=0
-            print "[FOUND] %s"%(hook['album'])
-            db.missing_titles_found.insert(results['track'])
+            if type(results['track']==dict)
+                print "[FOUND] %s"%(hook['album'])
+                db.missing_titles_found.insert(results['track'])
+            else:
+                for track in results['track']:
+                    if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower() and flag==0:
+                        db.lastfm_titles_found.insert(track)
+                        print "[FOUND] %s"%(hook['title'])
+                        flag =1
+                        break
+                if flag==0:
+                    print "[FAIL] %s"%(hook['title'])
+                    db.lastfm_titles_not_found.insert(hook)
+
         else:
             print "[FAIL] %s"%(hook['album'])
             db.missing_titles_not_found.insert(hook)
