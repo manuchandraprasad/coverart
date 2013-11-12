@@ -32,19 +32,25 @@ for hook in songs:
         print "[FETCH] %s"%(hook['album'])
         results = api.json()['results']['trackmatches']
         if results:
-            if type(results['track']==dict)
+            if type(results['track'])==dict:
                 print "[FOUND] %s"%(hook['album'])
-                db.missing_titles_found.insert(results['track'])
+                if 'image' in results['track'].keys():
+                    db.missing_titles_found.insert(results['track'])
+                else:
+                    print "[FAIL][NO IMAGE] %s"%(hook['album' ])
+                    db.missing_titles_not_found.insert(hook)
             else:
+                flag=0
                 for track in results['track']:
                     if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower() and flag==0:
-                        db.lastfm_titles_found.insert(track)
-                        print "[FOUND] %s"%(hook['title'])
-                        flag =1
-                        break
+                        if 'image' in track.keys():
+                            print "[FOUND] %s"%(hook['album'])
+                            db.missing_titles_found.insert(track)
+                            flag=1
+                            break
                 if flag==0:
-                    print "[FAIL] %s"%(hook['title'])
-                    db.lastfm_titles_not_found.insert(hook)
+                    print "[FAIL] %s"%(hook['album' ])
+                    db.missing_titles_not_found.insert(hook)
 
         else:
             print "[FAIL] %s"%(hook['album'])
