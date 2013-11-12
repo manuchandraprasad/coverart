@@ -24,11 +24,18 @@ for hook in db.lastfm_not_found.find():
         last_fm_api = requests.get(link)
         results = last_fm_api.json()['results']['trackmatches']
         if results:
+            flag=0
             for track in results['track']:
-                if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower():
-                    db.lastfm_titles_found.insert(results['track'])
+                if (hook['artist'].split(' ')[0]).lower() in track['artist'].lower() and flag=0:
+                    db.lastfm_titles_found.insert(track)
                     print "[FOUND] %s"%(hook['title'])
+                    flag =1
+                    print '[BREAK]break from loop for %s'%hook['title']
                     break
+            if flag==0:
+                print "[FAIL] %s"%(hook['title'])
+                db.lastfm_titles_not_found.insert(hook)
+
         else:
             print "[FAIL] %s"%(hook['title'])
             db.lastfm_titles_not_found.insert(hook)
