@@ -1,10 +1,5 @@
 from config import * 
-mbid = MongoClient().mbid
 from pprint import pprint
-format = {}
-for h in db.new_hooks.find({'album_art': "http://image-quick.com/default-album-artwork.png"}):
-	if format[h['format']]:
-		format[h['format']]+=1
-	else:
-		format[h['format']] = 1
-pprint(format)
+for h in db.h_new.find({'album_art': "http://image-quick.com/default-album-artwork.png"}):
+	h['album_art'] = 'https://s3.amazonaws.com/album_arts/'+h['hook']+'.jpg'
+	db.h_new.save(h)
